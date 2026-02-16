@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý kho</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <h1>Kho hàng</h1>
+      <nav>
+        <button class="menu-btn active" data-view="overview">Tổng quan</button>
+        <button class="menu-btn" data-view="inventory">Tồn kho</button>
+        <button class="menu-btn" data-view="inbound">Nhập</button>
+        <button class="menu-btn" data-view="outbound">Xuất</button>
+        <button class="menu-btn" data-view="suppliers">Nhà cung cấp</button>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <section id="overview" class="view active"></section>
+      <section id="inventory" class="view"></section>
+      <section id="inbound" class="view"></section>
+      <section id="outbound" class="view"></section>
+      <section id="suppliers" class="view"></section>
+    </main>
+  </div>
+
+  <template id="product-row-template">
+    <tr>
+      <td><img class="product-thumb" alt="Ảnh sản phẩm" /></td>
+      <td class="name"></td>
+      <td class="brand"></td>
+      <td class="category"></td>
+      <td class="location"></td>
+      <td class="stock"></td>
+      <td><button class="danger remove">Xóa</button></td>
+    </tr>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
