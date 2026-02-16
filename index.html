@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý kho doanh nghiệp</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Inventory Pro</h1>
+        <p>Chuẩn doanh nghiệp</p>
+      </div>
+      <nav>
+        <button class="menu-item active" data-tab="tong-quan">Tổng quan</button>
+        <button class="menu-item" data-tab="ton-kho">Tồn kho</button>
+        <button class="menu-item" data-tab="nhap">Nhập</button>
+        <button class="menu-item" data-tab="xuat">Xuất</button>
+        <button class="menu-item" data-tab="lich-su">Lịch sử nhập xuất</button>
+        <button class="menu-item" data-tab="ban-hang">Bán hàng</button>
+        <button class="menu-item" data-tab="nha-cung-cap">Nhà cung cấp</button>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h2 id="page-title">Tổng quan</h2>
+        <p>Quản trị sản phẩm, tồn kho, nhập xuất và bán hàng.</p>
+      </header>
+
+      <section id="tong-quan" class="tab active">
+        <div class="stats-grid">
+          <article class="card"><h3>Tổng sản phẩm</h3><p id="stat-total-products">0</p></article>
+          <article class="card"><h3>Tồn kho hiện tại</h3><p id="stat-total-stock">0</p></article>
+          <article class="card"><h3>Sản phẩm sắp hết</h3><p id="stat-low-stock">0</p></article>
+          <article class="card"><h3>Giá trị kho (VND)</h3><p id="stat-stock-value">0</p></article>
+        </div>
+
+        <div class="panel">
+          <h3>Tất cả sản phẩm</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Ảnh</th>
+                  <th>SKU</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Thương hiệu</th>
+                  <th>Phân loại</th>
+                  <th>OEM</th>
+                  <th>Số lượng</th>
+                  <th>Ngưỡng</th>
+                  <th>Giá</th>
+                  <th>Vị trí</th>
+                </tr>
+              </thead>
+              <tbody id="overview-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="ton-kho" class="tab">
+        <div class="split">
+          <div class="panel">
+            <h3>Thêm / bớt sản phẩm</h3>
+            <form id="product-form">
+              <div class="grid-2">
+                <label>SKU<input required name="sku" type="text" placeholder="VD: SKU-001" /></label>
+                <label>Tên sản phẩm<input required name="name" type="text" /></label>
+                <label>Thương hiệu<input required name="brand" type="text" /></label>
+                <label>Phân loại
+                  <select name="category" id="category-select" required>
+                    <option value="">Chọn phân loại</option>
+                    <option>Lọc</option>
+                    <option>Thiết bị</option>
+                    <option>Phụ kiện</option>
+                    <option>Khác</option>
+                  </select>
+                </label>
+                <label id="oem-label" class="hidden">OEM<input name="oem" type="text" placeholder="Nhập OEM nếu là Lọc" /></label>
+                <label>Số lượng<input required name="quantity" type="number" min="0" value="0" /></label>
+                <label>Ngưỡng giới hạn<input required name="threshold" type="number" min="0" value="0" /></label>
+                <label>Giá (VND)<input required name="price" type="number" min="0" value="0" /></label>
+                <label>Vị trí<input required name="location" type="text" placeholder="Kệ A1" /></label>
+                <label>Ảnh sản phẩm
+                  <input id="image-upload" type="file" accept="image/*" />
+                </label>
+              </div>
+
+              <div class="camera-box">
+                <video id="camera" autoplay playsinline></video>
+                <canvas id="camera-canvas" class="hidden"></canvas>
+                <div class="camera-actions">
+                  <button type="button" id="start-camera" class="secondary">Mở camera</button>
+                  <button type="button" id="capture-photo" class="secondary">Chụp ảnh</button>
+                  <img id="preview-image" alt="Xem trước ảnh sản phẩm" />
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit">Thêm sản phẩm</button>
+                <button type="reset" class="secondary" id="clear-image">Xóa ảnh</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <h3>Danh sách tồn kho</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>SKU</th>
+                    <th>Sản phẩm</th>
+                    <th>Vị trí</th>
+                    <th>Số lượng</th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="nhap" class="tab">
+        <div class="panel">
+          <h3>Nhập kho</h3>
+          <form id="import-form" class="inline-form">
+            <label>SKU <input required name="sku" type="text" /></label>
+            <label>Số lượng nhập <input required name="quantity" min="1" type="number" /></label>
+            <button type="submit">Xác nhận nhập</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="xuat" class="tab">
+        <div class="panel">
+          <h3>Xuất kho</h3>
+          <form id="export-form" class="inline-form">
+            <label>SKU <input required name="sku" type="text" /></label>
+            <label>Số lượng xuất <input required name="quantity" min="1" type="number" /></label>
+            <button type="submit">Xác nhận xuất</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="lich-su" class="tab">
+        <div class="panel">
+          <h3>Lịch sử nhập xuất</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Thời gian</th>
+                  <th>Loại</th>
+                  <th>SKU</th>
+                  <th>Số lượng</th>
+                  <th>Ghi chú</th>
+                </tr>
+              </thead>
+              <tbody id="history-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="ban-hang" class="tab">
+        <div class="panel">
+          <h3>Bán hàng</h3>
+          <p>Tạo đơn nhanh theo SKU và tự động trừ tồn kho.</p>
+          <form id="sales-form" class="inline-form">
+            <label>SKU <input required name="sku" type="text" /></label>
+            <label>Số lượng bán <input required name="quantity" min="1" type="number" /></label>
+            <button type="submit">Tạo đơn bán</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="nha-cung-cap" class="tab">
+        <div class="panel">
+          <h3>Nhà cung cấp</h3>
+          <p>Danh mục nhà cung cấp chính cho vận hành doanh nghiệp.</p>
+          <ul class="supplier-list">
+            <li>Nhà cung cấp A - Thiết bị lọc công nghiệp</li>
+            <li>Nhà cung cấp B - Phụ kiện thay thế</li>
+            <li>Nhà cung cấp C - Thiết bị đầu cuối</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
