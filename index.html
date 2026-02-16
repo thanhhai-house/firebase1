@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý Kho - Chuẩn Doanh Nghiệp</title>
+  <style>
+    :root {
+      --bg: #f3f5f9;
+      --panel: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #155eef;
+      --danger: #d92d20;
+      --success: #067647;
+      --border: #e5e7eb;
+      --shadow: 0 8px 24px rgba(16, 24, 40, 0.08);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+      letter-spacing: .2px;
+    }
+
+    .menu-title {
+      font-size: .78rem;
+      text-transform: uppercase;
+      opacity: .7;
+      margin: 18px 0 8px;
+    }
+
+    .menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .menu button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: #cbd5e1;
+      text-align: left;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .menu button.active,
+    .menu button:hover {
+      background: #1e293b;
+      color: #fff;
+    }
+
+    main {
+      padding: 24px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .header p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #eff4ff;
+    }
+
+    .panel {
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 18px;
+    }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    .grid-2 {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    label {
+      font-size: .9rem;
+      font-weight: 600;
+      display: grid;
+      gap: 6px;
+    }
+
+    input, select, textarea {
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: .95rem;
+      font-family: inherit;
+      width: 100%;
+      background: white;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-danger { background: #fee4e2; color: var(--danger); }
+    .btn-neutral { background: #eef2ff; color: #3730a3; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: .92rem;
+    }
+
+    th, td {
+      border-bottom: 1px solid #edf0f3;
+      text-align: left;
+      padding: 10px;
+      vertical-align: middle;
+    }
+
+    th { color: var(--muted); font-weight: 700; font-size: .8rem; text-transform: uppercase; }
+
+    .tag {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: .75rem;
+      font-weight: 700;
+      display: inline-block;
+      background: #e9f5ff;
+      color: #175cd3;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: #fafbff;
+      border: 1px solid #e4e7ec;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .stat h3 { margin: 0; font-size: .8rem; color: var(--muted); text-transform: uppercase; }
+    .stat p { margin: 6px 0 0; font-size: 1.2rem; font-weight: 700; }
+
+    #preview {
+      max-width: 120px;
+      max-height: 120px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+      display: none;
+    }
+
+    .muted { color: var(--muted); }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand">Inventory ERP Lite</div>
+      <div class="menu-title">Menu</div>
+      <ul class="menu">
+        <li><button class="active" data-screen="warehouse">Quản lý kho</button></li>
+        <li><button data-screen="overview">Tổng quan sản phẩm</button></li>
+        <li><button data-screen="sales">Bán hàng</button></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section id="warehouse" class="screen active">
+        <div class="header">
+          <div>
+            <h1>Thêm / Bớt sản phẩm</h1>
+            <p>Quản lý danh mục theo chuẩn doanh nghiệp, đầy đủ kiểm soát tồn kho và lịch sử giao dịch.</p>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="nhap">Nhập</button>
+          <button class="tab-btn" data-tab="xuat">Xuất</button>
+          <button class="tab-btn" data-tab="history">Lịch sử nhập xuất</button>
+        </div>
+
+        <div class="panel tab-pane active" id="tab-nhap">
+          <form id="productForm">
+            <div class="grid-2">
+              <label>SKU<input required name="sku" placeholder="VD: SK-001" /></label>
+              <label>Tên sản phẩm<input required name="name" placeholder="VD: Lọc dầu xe" /></label>
+              <label>Thương hiệu<input required name="brand" placeholder="VD: Bosch" /></label>
+              <label>Phân loại
+                <select name="category" id="category">
+                  <option value="Phụ tùng">Phụ tùng</option>
+                  <option value="Lọc">Lọc</option>
+                  <option value="Dầu nhớt">Dầu nhớt</option>
+                </select>
+              </label>
+              <label id="oemWrap" style="display:none;">OEM<input name="oem" placeholder="Nhập mã OEM" /></label>
+              <label>Số lượng<input required type="number" min="0" name="quantity" value="0" /></label>
+              <label>Ngưỡng giới hạn<input required type="number" min="0" name="threshold" value="5" /></label>
+              <label>Giá (VND)<input required type="number" min="0" name="price" value="0" /></label>
+              <label>Vị trí<input required name="location" placeholder="Kệ A-03" /></label>
+            </div>
+
+            <div class="grid-2" style="margin-top:12px;">
+              <label>Hình ảnh (Upload trực tiếp)
+                <input type="file" id="uploadImage" accept="image/*" />
+              </label>
+              <label>Hoặc chụp ảnh trực tiếp
+                <input type="file" id="cameraImage" accept="image/*" capture="environment" />
+              </label>
+            </div>
+
+            <img id="preview" alt="Xem trước ảnh sản phẩm" />
+
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">Lưu sản phẩm</button>
+              <button class="btn btn-danger" type="button" id="removeBtn">Bớt sản phẩm theo SKU</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel tab-pane" id="tab-xuat">
+          <h3>Xuất kho</h3>
+          <p class="muted">Nhập SKU và số lượng cần xuất để tạo giao dịch xuất kho.</p>
+          <div class="grid-2">
+            <label>SKU sản phẩm<input id="exportSku" placeholder="SK-001" /></label>
+            <label>Số lượng xuất<input id="exportQty" type="number" min="1" value="1" /></label>
+          </div>
+          <div class="actions"><button class="btn btn-neutral" id="exportBtn">Xác nhận xuất</button></div>
+        </div>
+
+        <div class="panel tab-pane" id="tab-history">
+          <h3>Lịch sử nhập xuất</h3>
+          <table>
+            <thead><tr><th>Thời gian</th><th>Loại</th><th>SKU</th><th>Số lượng</th><th>Ghi chú</th></tr></thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="overview" class="screen" style="display:none;">
+        <div class="header">
+          <div>
+            <h1>Tab tổng quan</h1>
+            <p>Hiển thị tất cả sản phẩm trong kho cùng trạng thái tồn.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="stat-grid">
+            <div class="stat"><h3>Tổng SKU</h3><p id="totalSku">0</p></div>
+            <div class="stat"><h3>Tồn kho hiện tại</h3><p id="totalStock">0</p></div>
+            <div class="stat"><h3>Sắp chạm ngưỡng</h3><p id="lowStock">0</p></div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>SKU</th><th>Tên SP</th><th>Thương hiệu</th><th>Phân loại</th><th>OEM</th><th>Tồn</th><th>Ngưỡng</th><th>Giá</th><th>Vị trí</th>
+              </tr>
+            </thead>
+            <tbody id="overviewBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="sales" class="screen" style="display:none;">
+        <div class="header"><div><h1>Tab bán hàng</h1><p>Quy trình tạo đơn nhanh: chọn SKU, số lượng và tự động trừ tồn.</p></div></div>
+        <div class="panel">
+          <div class="grid-2">
+            <label>SKU<input id="saleSku" placeholder="SK-001" /></label>
+            <label>Số lượng bán<input id="saleQty" type="number" min="1" value="1" /></label>
+          </div>
+          <div class="actions"><button class="btn btn-primary" id="saleBtn">Tạo giao dịch bán</button></div>
+          <p class="muted" id="saleStatus">Chưa có giao dịch.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const products = [];
+    const history = [];
+
+    const form = document.getElementById('productForm');
+    const category = document.getElementById('category');
+    const oemWrap = document.getElementById('oemWrap');
+    const historyBody = document.getElementById('historyBody');
+    const overviewBody = document.getElementById('overviewBody');
+    const totalSku = document.getElementById('totalSku');
+    const totalStock = document.getElementById('totalStock');
+    const lowStock = document.getElementById('lowStock');
+
+    document.querySelectorAll('.menu button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const target = btn.dataset.screen;
+        document.querySelectorAll('.screen').forEach(s => {
+          s.style.display = s.id === target ? 'block' : 'none';
+        });
+      });
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        document.getElementById(`tab-${tab}`).classList.add('active');
+      });
+    });
+
+    category.addEventListener('change', () => {
+      oemWrap.style.display = category.value === 'Lọc' ? 'grid' : 'none';
+    });
+
+    function addHistory(type, sku, qty, note) {
+      history.unshift({ time: new Date().toLocaleString('vi-VN'), type, sku, qty, note });
+      historyBody.innerHTML = history.map(row => `
+        <tr>
+          <td>${row.time}</td>
+          <td><span class="tag">${row.type}</span></td>
+          <td>${row.sku}</td>
+          <td>${row.qty}</td>
+          <td>${row.note}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderOverview() {
+      overviewBody.innerHTML = products.map(p => `
+        <tr>
+          <td>${p.sku}</td><td>${p.name}</td><td>${p.brand}</td><td>${p.category}</td><td>${p.oem || '-'}</td>
+          <td>${p.quantity}</td><td>${p.threshold}</td><td>${Number(p.price).toLocaleString('vi-VN')} đ</td><td>${p.location}</td>
+        </tr>
+      `).join('');
+
+      totalSku.textContent = products.length;
+      totalStock.textContent = products.reduce((sum, p) => sum + Number(p.quantity), 0);
+      lowStock.textContent = products.filter(p => Number(p.quantity) <= Number(p.threshold)).length;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      const found = products.find(p => p.sku === data.sku);
+      if (found) {
+        Object.assign(found, data, { quantity: Number(data.quantity) + Number(found.quantity) });
+      } else {
+        products.push({ ...data, quantity: Number(data.quantity), threshold: Number(data.threshold), price: Number(data.price) });
+      }
+      addHistory('Nhập', data.sku, data.quantity, 'Tạo/cập nhật từ form nhập');
+      renderOverview();
+      form.reset();
+      oemWrap.style.display = 'none';
+      alert('Đã lưu sản phẩm thành công.');
+    });
+
+    document.getElementById('removeBtn').addEventListener('click', () => {
+      const sku = prompt('Nhập SKU muốn bớt sản phẩm:');
+      if (!sku) return;
+      const idx = products.findIndex(p => p.sku === sku);
+      if (idx === -1) return alert('Không tìm thấy SKU.');
+      products.splice(idx, 1);
+      addHistory('Bớt', sku, 0, 'Xoá sản phẩm khỏi danh mục');
+      renderOverview();
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const sku = document.getElementById('exportSku').value.trim();
+      const qty = Number(document.getElementById('exportQty').value);
+      const product = products.find(p => p.sku === sku);
+      if (!product) return alert('SKU không tồn tại.');
+      if (product.quantity < qty) return alert('Không đủ tồn kho để xuất.');
+      product.quantity -= qty;
+      addHistory('Xuất', sku, qty, 'Xuất kho thủ công');
+      renderOverview();
+      alert('Xuất kho thành công.');
+    });
+
+    document.getElementById('saleBtn').addEventListener('click', () => {
+      const sku = document.getElementById('saleSku').value.trim();
+      const qty = Number(document.getElementById('saleQty').value);
+      const product = products.find(p => p.sku === sku);
+      const status = document.getElementById('saleStatus');
+      if (!product) return status.textContent = 'Lỗi: SKU không tồn tại.';
+      if (product.quantity < qty) return status.textContent = 'Lỗi: Không đủ tồn kho để bán.';
+      product.quantity -= qty;
+      addHistory('Bán', sku, qty, 'Đơn bán từ tab bán hàng');
+      renderOverview();
+      status.textContent = `Đã bán ${qty} sản phẩm của SKU ${sku}.`;
+    });
+
+    function handleImage(file) {
+      if (!file) return;
+      const preview = document.getElementById('preview');
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    }
+
+    document.getElementById('uploadImage').addEventListener('change', e => handleImage(e.target.files[0]));
+    document.getElementById('cameraImage').addEventListener('change', e => handleImage(e.target.files[0]));
+  </script>
+</body>
+</html>
