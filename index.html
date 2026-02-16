@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý sản phẩm</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card form-card">
+        <header>
+          <h1>Thông tin sản phẩm</h1>
+          <p>Cập nhật mã SKU, OEM và phân loại nhanh chóng.</p>
+        </header>
+
+        <form id="product-form" novalidate>
+          <label for="product-name">Tên sản phẩm</label>
+          <input id="product-name" name="productName" type="text" placeholder="Ví dụ: Lọc nhớt động cơ" required />
+
+          <div class="split">
+            <div>
+              <label for="sku">Mã SKU</label>
+              <input id="sku" name="sku" type="text" placeholder="SKU-001" required />
+            </div>
+            <div>
+              <label for="category">Phân loại</label>
+              <select id="category" name="category" required>
+                <option value="">Chọn phân loại</option>
+                <option value="Lọc">Lọc</option>
+                <option value="Phụ tùng">Phụ tùng</option>
+                <option value="Dầu nhớt">Dầu nhớt</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="oem">Mã OEM chính</label>
+          <input id="oem" name="oem" type="text" placeholder="OEM chính" required />
+
+          <div id="replacement-wrapper" class="hidden">
+            <label for="replacement-oem">OEM thay thế (dành cho phân loại Lọc)</label>
+            <input id="replacement-oem" name="replacementOem" type="text" placeholder="OEM thay thế" />
+          </div>
+
+          <button type="submit">Lưu thông tin</button>
+        </form>
+      </section>
+
+      <section class="card preview-card">
+        <h2>Xem trước</h2>
+        <dl id="preview">
+          <div><dt>Tên sản phẩm</dt><dd>—</dd></div>
+          <div><dt>SKU</dt><dd>—</dd></div>
+          <div><dt>Phân loại</dt><dd>—</dd></div>
+          <div><dt>OEM chính</dt><dd>—</dd></div>
+          <div id="preview-replacement" class="hidden"><dt>OEM thay thế</dt><dd>—</dd></div>
+        </dl>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
