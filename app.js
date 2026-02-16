@@ -372,29 +372,55 @@ function renderSuppliers() {
     .join("");
 }
 
+function renderCategoryManager() {
+  const manager = document.getElementById("categoryManager");
+  manager.innerHTML = state.categories
+    .map((category) => {
+      const count = state.products.filter((p) => p.category === category).length;
+      const disableDelete = category === "Lọc";
+      return `<div class="category-item">
+        <div class="category-name"><strong>${category}</strong><span class="badge">${count} SP</span></div>
+        <button type="button" class="danger" data-remove-category="${category}" ${disableDelete ? "disabled" : ""}>Xóa</button>
+      </div>`;
+    })
+    .join("");
+
+  manager.querySelectorAll("[data-remove-category]").forEach((btn) => {
+    btn.onclick = () => {
+      const category = btn.dataset.removeCategory;
+      if (!category || category === "Lọc") return alert("Không thể xóa phân loại mặc định Lọc");
+      const usedCount = state.products.filter((p) => p.category === category).length;
+      if (usedCount > 0) {
+        const confirmed = confirm(`Phân loại ${category} đang có ${usedCount} sản phẩm. Chuyển các sản phẩm này về 'Lọc' và xóa phân loại?`);
+        if (!confirmed) return;
+      }
+      state.categories = state.categories.filter((c) => c !== category);
+      state.products = state.products.map((p) => (p.category === category ? { ...p, category: "Lọc" } : p));
+      saveState();
+      renderAll();
+    };
+  });
+}
+
 function initCategoryActions() {
   document.getElementById("addCategoryBtn").onclick = () => {
     const value = document.getElementById("newCategory").value.trim();
-    if (!value || state.categories.includes(value)) return;
+    if (!value) return;
+    if (state.categories.some((c) => c.toLowerCase() === value.toLowerCase())) {
+      alert("Phân loại đã tồn tại");
+      return;
+    }
     state.categories.push(value);
     saveState();
-    renderCategories();
-    document.getElementById("newCategory").value = "";
-  };
-
-  document.getElementById("removeCategoryBtn").onclick = () => {
-    const current = document.getElementById("category").value;
-    if (current === "Lọc") return alert("Không thể xóa phân loại mặc định Lọc");
-    state.categories = state.categories.filter((c) => c !== current);
-    state.products = state.products.map((p) => (p.category === current ? { ...p, category: "Lọc" } : p));
-    saveState();
     renderAll();
+    document.getElementById("newCategory").value = "";
   };
 }
 
 function renderAll() {
   renderCategories();
   toggleOem();
+  renderCategoryManager();
   renderOverview();
   renderInventoryTable();
   populateProductSelects();

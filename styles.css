@@ -154,6 +154,36 @@ label {
   grid-column: 1 / -1;
 }
 
+.category-manager {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 8px;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #f8fbff;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.category-name {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.badge {
+  background: #e2efff;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
 .hidden {
   display: none;
 }
