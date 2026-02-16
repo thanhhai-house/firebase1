@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý kho doanh nghiệp</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <h1>BlueStock ERP</h1>
+        <p class="subtitle">Chuẩn doanh nghiệp</p>
+        <nav class="menu" id="menuTabs">
+          <button class="menu-item active" data-tab="tong-quan">Tổng quan</button>
+          <button class="menu-item" data-tab="ton-kho">Tồn kho</button>
+          <button class="menu-item" data-tab="nhap">Nhập</button>
+          <button class="menu-item" data-tab="xuat">Xuất</button>
+          <button class="menu-item" data-tab="lich-su">Lịch sử nhập xuất</button>
+          <button class="menu-item" data-tab="ban-hang">Bán hàng</button>
+          <button class="menu-item" data-tab="nha-cung-cap">Nhà cung cấp</button>
+          <button class="menu-item" data-tab="cau-hinh">Cấu hình danh mục</button>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <header class="toolbar">
+          <div>
+            <h2 id="pageTitle">Tổng quan sản phẩm</h2>
+            <p id="pageDescription">Theo dõi toàn bộ sản phẩm và tìm kiếm nhanh theo SKU/tên.</p>
+          </div>
+          <div class="pill">Giao diện xanh dương trắng pastel</div>
+        </header>
+
+        <section class="panel visible" id="tab-tong-quan">
+          <div class="card">
+            <h3>Tìm kiếm sản phẩm</h3>
+            <div class="search-row">
+              <input id="searchProduct" type="text" placeholder="Tìm theo SKU hoặc tên sản phẩm" />
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ảnh</th>
+                    <th>SKU</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Thương hiệu</th>
+                    <th>Phân loại</th>
+                    <th>OEM</th>
+                    <th>Số lượng</th>
+                    <th>Ngưỡng giới hạn</th>
+                    <th>Giá</th>
+                    <th>Vị trí</th>
+                  </tr>
+                </thead>
+                <tbody id="overviewTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-ton-kho">
+          <div class="grid two">
+            <article class="card">
+              <h3>Cập nhật sản phẩm</h3>
+              <form id="productForm" class="form-grid">
+                <label>SKU <input required id="sku" /></label>
+                <label>Tên sản phẩm <input required id="productName" /></label>
+                <label>Thương hiệu <input required id="brand" /></label>
+                <label>
+                  Phân loại
+                  <select id="category" required></select>
+                </label>
+                <label id="oemWrapper" class="hidden">OEM (chỉ cho phân loại Lọc) <input id="oem" /></label>
+                <label>Số lượng <input required id="quantity" type="number" min="0" /></label>
+                <label>Ngưỡng giới hạn <input required id="threshold" type="number" min="0" /></label>
+                <label>Giá (VNĐ) <input required id="price" type="number" min="0" /></label>
+                <label>Vị trí <input required id="location" /></label>
+                <label>
+                  Upload ảnh sản phẩm
+                  <input id="imageUpload" type="file" accept="image/*" />
+                </label>
+                <label>
+                  Hoặc chụp trực tiếp
+                  <input id="imageCapture" type="file" accept="image/*" capture="environment" />
+                </label>
+                <div class="form-actions">
+                  <button type="submit">Thêm / Cập nhật</button>
+                  <button id="resetForm" type="button" class="ghost">Làm mới</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="card">
+              <h3>Danh sách tồn kho</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>Tên sản phẩm</th>
+                      <th>SL</th>
+                      <th>Vị trí</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventoryTableBody"></tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-nhap">
+          <div class="card">
+            <h3>Nhập kho nhanh</h3>
+            <form id="importForm" class="inline-form">
+              <select id="importSku"></select>
+              <input id="importQty" type="number" min="1" placeholder="Số lượng nhập" required />
+              <button type="submit">Cập nhật nhập</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-xuat">
+          <div class="card">
+            <h3>Xuất kho nhanh</h3>
+            <form id="exportForm" class="inline-form">
+              <select id="exportSku"></select>
+              <input id="exportQty" type="number" min="1" placeholder="Số lượng xuất" required />
+              <button type="submit">Cập nhật xuất</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-lich-su">
+          <div class="card">
+            <h3>Lịch sử nhập xuất</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Thời gian</th>
+                    <th>Loại</th>
+                    <th>SKU</th>
+                    <th>Số lượng</th>
+                    <th>Ghi chú</th>
+                  </tr>
+                </thead>
+                <tbody id="historyTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-ban-hang">
+          <div class="card">
+            <h3>Tạo đơn bán hàng</h3>
+            <div id="salesSelection" class="sales-list"></div>
+            <button id="createInvoice" class="invoice-btn">Xem PDF đơn hàng</button>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-nha-cung-cap">
+          <div class="card">
+            <h3>Nhà cung cấp</h3>
+            <ul id="suppliers" class="supplier-list"></ul>
+          </div>
+        </section>
+
+        <section class="panel" id="tab-cau-hinh">
+          <div class="grid two">
+            <div class="card">
+              <h3>Quản lý thương hiệu</h3>
+              <form id="brandForm" class="inline-form">
+                <input id="brandInput" placeholder="Thêm thương hiệu" required />
+                <button type="submit">Thêm</button>
+              </form>
+              <ul id="brandList" class="tag-list"></ul>
+            </div>
+            <div class="card">
+              <h3>Quản lý phân loại</h3>
+              <form id="categoryForm" class="inline-form">
+                <input id="categoryInput" placeholder="Thêm phân loại" required />
+                <button type="submit">Thêm</button>
+              </form>
+              <ul id="categoryList" class="tag-list"></ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
