@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enterprise WMS | Quản lý kho doanh nghiệp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="logo-block">
+          <div class="logo">EW</div>
+          <div>
+            <p class="muted">Enterprise Suite</p>
+            <h1>Warehouse Pro</h1>
+          </div>
+        </div>
+
+        <nav>
+          <button class="nav-item active">Tổng quan</button>
+          <button class="nav-item">Tồn kho</button>
+          <button class="nav-item">Nhập/Xuất</button>
+          <button class="nav-item">Nhà cung cấp</button>
+          <button class="nav-item">Báo cáo</button>
+        </nav>
+
+        <section class="sidebar-card">
+          <p class="muted">Trạng thái kho</p>
+          <h3 id="capacityText">0% sử dụng</h3>
+          <div class="progress-track"><span id="capacityBar"></span></div>
+          <small id="capacityInfo">0/10000 đơn vị</small>
+        </section>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div>
+            <p class="muted">Dashboard</p>
+            <h2>Quản lý kho theo chuẩn doanh nghiệp</h2>
+          </div>
+          <div class="topbar-actions">
+            <input id="searchInput" placeholder="Tìm SKU, tên sản phẩm..." />
+            <button id="exportBtn" class="btn btn-light">Xuất CSV</button>
+          </div>
+        </header>
+
+        <section class="kpi-grid">
+          <article class="kpi-card">
+            <p>Tổng SKU</p>
+            <h3 id="totalSku">0</h3>
+          </article>
+          <article class="kpi-card">
+            <p>Tổng tồn hiện tại</p>
+            <h3 id="totalStock">0</h3>
+          </article>
+          <article class="kpi-card">
+            <p>Giá trị tồn kho</p>
+            <h3 id="inventoryValue">0 ₫</h3>
+          </article>
+          <article class="kpi-card alert">
+            <p>Sắp hết hàng</p>
+            <h3 id="lowStockCount">0</h3>
+          </article>
+        </section>
+
+        <section class="panel two-col">
+          <div>
+            <h3>Danh sách tồn kho</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Sản phẩm</th>
+                  <th>Danh mục</th>
+                  <th>Tồn kho</th>
+                  <th>Ngưỡng cảnh báo</th>
+                  <th>Đơn giá</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTable"></tbody>
+            </table>
+          </div>
+
+          <div class="card-stack">
+            <section class="panel nested">
+              <h3>Thêm SKU mới</h3>
+              <form id="itemForm" class="form-grid">
+                <input id="sku" required placeholder="SKU" />
+                <input id="name" required placeholder="Tên sản phẩm" />
+                <input id="category" required placeholder="Danh mục" />
+                <input id="quantity" type="number" min="0" required placeholder="Số lượng" />
+                <input
+                  id="threshold"
+                  type="number"
+                  min="0"
+                  required
+                  placeholder="Ngưỡng cảnh báo"
+                />
+                <input id="unitPrice" type="number" min="0" required placeholder="Đơn giá" />
+                <button class="btn" type="submit">Lưu SKU</button>
+              </form>
+            </section>
+
+            <section class="panel nested">
+              <h3>Ghi nhận nhập / xuất</h3>
+              <form id="movementForm" class="form-grid">
+                <select id="movementSku" required></select>
+                <select id="movementType" required>
+                  <option value="in">Nhập kho</option>
+                  <option value="out">Xuất kho</option>
+                </select>
+                <input id="movementQty" type="number" min="1" required placeholder="Số lượng" />
+                <input id="movementNote" placeholder="Ghi chú (PO/SO/Memo)" />
+                <button class="btn" type="submit">Ghi nhận</button>
+              </form>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Lịch sử giao dịch gần nhất</h3>
+          <ul id="movementList" class="movement-list"></ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
