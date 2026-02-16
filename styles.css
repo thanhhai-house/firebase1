@@ -1,0 +1,199 @@
+:root {
+  --blue-50: #f1f7ff;
+  --blue-100: #dceeff;
+  --blue-200: #c7e2ff;
+  --blue-500: #3492ff;
+  --blue-700: #1e5fb8;
+  --text: #103b6f;
+  --white: #ffffff;
+  --danger: #ff6f8f;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(120deg, var(--blue-50), var(--white));
+  color: var(--text);
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--white);
+  border-right: 1px solid var(--blue-100);
+  padding: 1.5rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar h1 {
+  margin: 0;
+  color: var(--blue-700);
+}
+
+.sidebar p {
+  margin: 0.4rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+nav {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.menu-btn,
+.tab-btn,
+.primary,
+.secondary,
+.mini-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-btn,
+.tab-btn,
+.secondary {
+  background: var(--blue-50);
+  color: var(--text);
+}
+
+.menu-btn.active,
+.tab-btn.active,
+.primary {
+  background: var(--blue-500);
+  color: var(--white);
+}
+
+.mini-btn {
+  background: var(--blue-200);
+  min-width: 35px;
+}
+
+.mini-btn.danger {
+  background: var(--danger);
+  color: var(--white);
+}
+
+.content {
+  padding: 1.3rem;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active,
+.tab-content.active {
+  display: block;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  margin-top: 1rem;
+  background: var(--white);
+  border: 1px solid var(--blue-100);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 10px 24px rgba(52, 146, 255, 0.08);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+input,
+select {
+  border: 1px solid var(--blue-200);
+  border-radius: 10px;
+  padding: 0.55rem;
+  background: var(--white);
+}
+
+.inline-input {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.4rem;
+}
+
+.actions {
+  margin-top: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.table-wrap {
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--blue-100);
+  text-align: left;
+  padding: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.warning {
+  color: #ca8900;
+  font-weight: 600;
+}
+
+.simple-form,
+.sales-form {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.tabs {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.8rem 0;
+}
+
+.sales-row {
+  display: grid;
+  grid-template-columns: 1fr 120px auto;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.sales-preview-actions {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 0.5rem;
+}
